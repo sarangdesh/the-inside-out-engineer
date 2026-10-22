@@ -25,7 +25,7 @@ Abstractions are part of the subject: how they are built, what guarantees they p
 The Inside-Out Engineer's deep dives string together a story that starts at the bottom-most (almost) layer of the
 engineering stack and builds up towards the more familiar territory. An example:
 
-> [How Websites Work: From Browser Internals to Next.js](./how-websites-work-from-browser-internals-to-nextjs.md)
+> [How Websites Work: From Browser Internals to Next.js](./content/deep-dives/how-websites-work-from-browser-internals-to-nextjs.md)
 > 
 > A mechanism-first reference connecting browser internals, JavaScript runtimes, module loading, build tooling, React, and the Next.js App Router.
 
