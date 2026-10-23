@@ -1,8 +1,18 @@
-# The Inside-Out Engineer
-
-**Engineering knowledge, curated from the inside out.**
+<div align="center">
+  <img src="./assets/the-inside-out-engineer.png" alt="A sculpted bust whose outer shell of circuitry, code panels, and neural lattice opens to reveal a human face within" width="340">
+  <h1>The Inside-Out Engineer</h1>
+  <h3><em>Engineering knowledge, curated from the inside out.</em></h3>
+  <p>
+    <a href="#why-this-exists">Why this exists</a> ·
+    <a href="#the-inside-out-ethos">The inside-out ethos</a> ·
+    <a href="#deep-dives">Deep dives</a> ·
+    <a href="#contributions">Contributions</a>
+  </p>
+</div>
 
 A collection of bottom-up introductions, engineering deep dives, and reference material across computer science, software engineering, and related disciplines.
+
+---
 
 ## Why this exists
 
