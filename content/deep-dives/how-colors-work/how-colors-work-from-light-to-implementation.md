@@ -41,9 +41,9 @@ One color runs through the whole document, `#1A2B3C`, a dark slate blue.
 
 ## The whole pipeline before the details
 
-Before any one layer, here is the journey in one picture. Follow the arrows from light at the top, through the numbers, and back to light.
+Before any one layer, here is the whole journey in one picture, following `#1A2B3C` from a light source, through the numbers, and back to your eye.
 
-![A flow of boxes. Spectrum leads to cone responses, then CIE XYZ, linear RGB, encoded RGB, and the stored value 26, 43, 60, which leads to the display and a new spectrum that matches for the eye. Dashed arrows lead from linear RGB to luminance and contrast decisions, and from the stored value to models for people such as HSL, HSB, and OKLCH.](assets/fig-15-pipeline.svg)
+![Eight numbered steps. 1, light leaves a source as a spectrum. 2, the eye keeps only three signals, the cone responses. 3, we standardize those signals as CIE XYZ. 4, a screen needs amounts of three lights, linear RGB. 5, those are bent to suit vision, encoded RGB. 6, they are rounded and written down as #1A2B3C. 7, the display turns them back into light. 8, a different spectrum gives the same color. Two dashed questions branch off: can text on it be read, from step 4, and how do people talk about it, from step 6.](assets/fig-15-pipeline.svg)
 
 The same color at each stage, computed with the formulas developed below:
 
