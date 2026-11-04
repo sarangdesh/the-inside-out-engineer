@@ -43,18 +43,7 @@ One color runs through the whole document, `#1A2B3C`, a dark slate blue.
 
 Before any one layer, here is the journey in one picture. Follow the arrows from light at the top, through the numbers, and back to light.
 
-```mermaid
-flowchart TD
-    S["Spectrum: power at each wavelength"] --> C["Three cone responses: L, M, S"]
-    C --> X["CIE XYZ: a standard form of those responses"]
-    X --> L["Linear RGB: amounts of three primaries"]
-    L --> E["Encoded RGB: after the transfer function"]
-    E --> Q["Stored value: 26, 43, 60"]
-    Q --> D["Display: decodes and drives subpixels"]
-    D --> S2["A new spectrum that matches for the eye"]
-    L -.-> Y["Luminance and contrast: decisions"]
-    Q -.-> K["HSL, HSB, OKLCH: models for people"]
-```
+![A flow of boxes. Spectrum leads to cone responses, then CIE XYZ, linear RGB, encoded RGB, and the stored value 26, 43, 60, which leads to the display and a new spectrum that matches for the eye. Dashed arrows lead from linear RGB to luminance and contrast decisions, and from the stored value to models for people such as HSL, HSB, and OKLCH.](assets/fig-15-pipeline.svg)
 
 The same color at each stage, computed with the formulas developed below:
 
@@ -88,7 +77,9 @@ Almost no light you encounter is a single wavelength. A light source emits some 
 
 ![A chart of relative power from 380 to 780 nanometers. The D65 curve is jagged and roughly level around 100, while the illuminant A curve rises smoothly from about 10 at 380 nanometers to about 240 at 780 nanometers. They cross at 560 nanometers.](assets/fig-12-light-sources.svg)
 
-Both curves are standards of the International Commission on Illumination (CIE). [Illuminant D65](https://cie.co.at/datatable/cie-standard-illuminant-d65) represents average daylight, and it is a measured, tabulated shape. Illuminant A represents a tungsten filament, and it follows directly from Planck's law for a hot body at 2848 K. Comparing 700 nm with 400 nm, the filament has more than ten times as much long-wave power, relative to short-wave power, as daylight. Yet in a room lit by either, once your eyes settle, a sheet of paper looks white.
+*The colored strip along the axis is approximate.*
+
+Both curves are standards of the International Commission on Illumination (CIE), plotted here from their published values. [Illuminant D65](https://cie.co.at/datatable/cie-standard-illuminant-d65) represents average daylight, and it is a measured, tabulated shape. Illuminant A represents a tungsten filament, and it follows directly from Planck's law for a hot body at 2848 K. Comparing 700 nm with 400 nm, the filament has more than ten times as much long-wave power, relative to short-wave power, as daylight. Yet in a room lit by either, once your eyes settle, a sheet of paper looks white.
 
 Most objects do not emit light. They reflect part of what falls on them, with a reflectance R(λ) from 0 to 1 at each wavelength, so what reaches your eye is the product at every wavelength:
 
@@ -130,9 +121,13 @@ Here is the reduction. Whatever the spectrum, the retina's first step keeps thre
 
 If the visual system keeps only three numbers, then any two spectra that give the same three numbers must look the same. Such a pair is a **metamer**, and metamers are not rare curiosities. Every color screen depends on them:
 
-![A chart of relative power from 380 to 780 nanometers. The D65 daylight curve is broad and near 100, while the other spectrum is three narrow peaks near 465, 535, and 615 nanometers, each over 230. Below the chart, both have X 0.9504, Y 1.0000, and Z 1.0886.](assets/fig-13-metamer.svg)
+![Two columns compare a pure yellow light with a display showing the same yellow. The yellow is one narrow spectral peak, and the display is broad blue, green, and red curves. Each spectrum is multiplied by the S, M, and L cone sensitivities, and both columns end with the same three cone responses.](assets/ref-metamerism.svg)
 
-The three peaks in this figure are illustrative Gaussian curves, scaled by solving a 3 by 3 linear system so that their tristimulus values equal those of D65. Their spectra barely resemble daylight, and between the peaks they emit almost nothing, yet for the standard observer the two lights are the same color. There is no need to reproduce a spectrum to reproduce a color, which is why a display needs only three emitters rather than hundreds.
+*Image: cmglee and Vanessaezekowitz, CC BY-SA 4.0, via Wikimedia Commons. White background added.*
+
+Read each column from top to bottom. On the left, a spectrum with a single narrow peak. On the right, a display's three broad curves, a very different shape. Multiplying by the cone sensitivities and adding up gives the same three responses, so the two lights look the same. There is no need to reproduce a spectrum to reproduce a color, which is why a display needs only three emitters rather than hundreds.
+
+The same holds for white. Using the CIE tables, three narrow Gaussian peaks at 465, 535, and 615 nm, invented for this calculation and scaled by solving a 3 by 3 linear system, give X = 0.9504, Y = 1.0000, and Z = 1.0886, the same as D65 daylight, even though between the peaks they emit almost nothing.
 
 Metamerism has limits, and they are worth keeping in mind:
 
@@ -153,7 +148,7 @@ Y = sum over λ of  S(λ) * ybar(λ)
 Z = sum over λ of  S(λ) * zbar(λ)
 ```
 
-XYZ is not a set of cone responses, and X, Y, and Z are not lights that exist. But the transform is linear and the original data came from color matching, so two spectra with the same XYZ are a metamer for the standard observer. The [CVRL database](http://www.cvrl.org/cmfs.htm) publishes these tables, and the metamer above was computed from them. XYZ is the common ground that every color space below is defined against, and **Y** has a physical meaning we will use repeatedly: it is **luminance**, a measure of how intense a light appears, weighted by wavelength.
+XYZ is not a set of cone responses, and X, Y, and Z are not lights that exist. But the transform is linear and the original data came from color matching, so two spectra with the same XYZ are a metamer for the standard observer. The [CVRL database](http://www.cvrl.org/cmfs.htm) publishes these tables, and the calculation for white above used them. XYZ is the common ground that every color space below is defined against, and **Y** has a physical meaning we will use repeatedly: it is **luminance**, a measure of how intense a light appears, weighted by wavelength.
 
 #### Separating color from intensity
 
@@ -768,13 +763,14 @@ Tools and practice:
 
 ## Image credits
 
-These images keep their own licenses, as linked, rather than the repository's. They are unmodified except where noted. The other figures are original to this repository.
+These images keep their own licenses, as linked, rather than the repository's. They are unmodified except where noted. The other figures are original to this repository. `fig-12` and `fig-14` are plotted directly from the CIE tables and the formulas given in the text.
 
 | File | Source | Author | License | Change |
 |---|---|---|---|---|
 | `ref-visible-spectrum.svg` | [Linear visible spectrum](https://commons.wikimedia.org/wiki/File:Linear_visible_spectrum.svg) | Gringer | Public domain | White background added |
 | `ref-cone-response.svg` | [Cone fundamentals with sRGB spectrum](https://commons.wikimedia.org/wiki/File:Cone-fundamentals-with-srgb-spectrum.svg) | BenRG | Public domain | None |
 | `ref-cie-chromaticity.svg` | [CIE1931xy blank](https://commons.wikimedia.org/wiki/File:CIE1931xy_blank.svg) | BenRG | Public domain | White background added |
+| `ref-metamerism.svg` | [Metamerism spectrum example](https://commons.wikimedia.org/wiki/File:Metamerism_spectrum_example.svg) | cmglee, Vanessaezekowitz | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) | White background added |
 | `ref-pixel-geometry.jpg` | [Pixel geometry 01 Pengo](https://commons.wikimedia.org/wiki/File:Pixel_geometry_01_Pengo.jpg) | Pengo | [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/) | None |
 | `ref-gamut-comparison.svg` | [CIE1931xy gamut comparison of sRGB P3 Rec2020](https://commons.wikimedia.org/wiki/File:CIE1931xy_gamut_comparison_of_sRGB_P3_Rec2020.svg) | Myndex | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) | White background added |
 | `ref-hue-chroma.svg` | [HSL-HSV hue and chroma](https://commons.wikimedia.org/wiki/File:HSL-HSV_hue_and_chroma.svg) | Jacob Rus | [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/) | White background added |
