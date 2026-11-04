@@ -19,6 +19,151 @@ of any library. Implementation notes on culori and Figma are in the
 11. [Other models](#11-other-models)
 12. [References](#12-references)
 
+## Part I: Light and vision
+
+### 1. What color is before there are numbers: light and spectra
+
+Start without any numbers at all, with a lamp in a room.
+
+Light is electromagnetic radiation, and the part we can see has wavelengths from roughly 380 to 780 nanometers. A single wavelength is a pure spectral light, and moving through the range gives the familiar rainbow:
+
+![The visible spectrum as a horizontal band, running from violet near 380 nanometers through blue, green, yellow, and orange to red near 750 nanometers.](assets/ref-visible-spectrum.svg)
+
+*Image: Gringer, public domain, via Wikimedia Commons.*
+
+Almost no light you encounter is a single wavelength. A light source emits some power at every wavelength in a range, and the complete description of a light is its **spectral power distribution**, or spectrum: a function that gives power for each wavelength, S(λ). That function has hundreds of meaningful degrees of freedom, and two white lights can have very different ones:
+
+![A chart of relative power from 380 to 780 nanometers. The D65 curve is jagged and roughly level around 100, while the illuminant A curve rises smoothly from about 10 at 380 nanometers to about 240 at 780 nanometers. They cross at 560 nanometers.](assets/fig-12-light-sources.svg)
+
+Both curves are standards of the International Commission on Illumination (CIE). [Illuminant D65](https://cie.co.at/datatable/cie-standard-illuminant-d65) represents average daylight, and it is a measured, tabulated shape. Illuminant A represents a tungsten filament, and it follows directly from Planck's law for a hot body at 2848 K. Comparing 700 nm with 400 nm, the filament has more than ten times as much long-wave power, relative to short-wave power, as daylight. Yet in a room lit by either, once your eyes settle, a sheet of paper looks white.
+
+Most objects do not emit light. They reflect part of what falls on them, with a reflectance R(λ) from 0 to 1 at each wavelength, so what reaches your eye is the product at every wavelength:
+
+```
+light reaching the eye at λ = S(λ) * R(λ)
+```
+
+So an object does not "have" a spectrum of its own in the sense of emitting one, and the light that leaves it changes with the illumination. A screen is simpler: its pixels emit light directly, and for now we can ignore the room.
+
+Nothing in that description mentions color. The spectrum is a physical quantity that an instrument can measure, and "red" is not one of its properties. Color is what a visual system makes of a spectrum. To store color in a few numbers, we need to know what that system keeps and what it throws away, which brings up the question this deep dive really rests on: **how can a function with hundreds of degrees of freedom be represented by three numbers?**
+
+### 2. Why three numbers are enough: cones, metamerism, and CIE XYZ
+
+Three numbers are enough because of how the retina samples light, and that fact shapes everything else in this document.
+
+#### Three kinds of sensor
+
+Human color vision begins with three classes of cone cell, named for the part of the spectrum they favor: long (L), medium (M), and short (S). Rod cells serve vision at very low light levels, and color perception in ordinary lighting rests on the cones. [Measurements of pigments in cells from a human retina](https://pubmed.ncbi.nlm.nih.gov/7359434/) put the absorbance peaks of the three cone types near 563, 534, and 420 nm, with rods near 498 nm.
+
+![Three normalized curves over wavelength, labeled S, M, and L, drawn over the color of the spectrum. S peaks near 440 nanometers. M and L overlap heavily, peaking near 545 and 570 nanometers.](assets/ref-cone-response.svg)
+
+*Image: BenRG, public domain, via Wikimedia Commons.*
+
+These response curves are measured at the front of the eye, so the lens and other pigments have already absorbed some short-wave light, which is why the peaks sit higher here than in the pigment measurements. The curves overlap heavily, especially M and L. Modern estimates of them, the [Stockman and Sharpe cone fundamentals](http://www.cvrl.org/cones.htm), are published as tables, with [their derivation](https://doi.org/10.1016/S0042-6989(00)00021-3) in the literature.
+
+A single cone reports only one thing: how many photons it absorbed. Once absorbed, a photon's wavelength is forgotten. A dim light at the cone's peak and a brighter light off its peak can produce the identical signal. Rushton called this the [principle of univariance](https://doi.org/10.1113/jphysiol.1972.sp009719), and it means that one cone class cannot tell wavelength from intensity. Vision compares the classes to recover something about wavelength.
+
+Each cone's response is therefore a single weighted sum across the spectrum:
+
+```
+L = sum over λ of  S(λ) * l(λ)
+M = sum over λ of  S(λ) * m(λ)
+S = sum over λ of  S(λ) * s(λ)
+```
+
+Here is the reduction. Whatever the spectrum, the retina's first step keeps three numbers, and everything else is gone before the signal has left the eye.
+
+#### Different light, same color
+
+If the visual system keeps only three numbers, then any two spectra that give the same three numbers must look the same. Such a pair is a **metamer**, and metamers are not rare curiosities. Every color screen depends on them:
+
+![A chart of relative power from 380 to 780 nanometers. The D65 daylight curve is broad and near 100, while the other spectrum is three narrow peaks near 465, 535, and 615 nanometers, each over 230. Below the chart, both have X 0.9504, Y 1.0000, and Z 1.0886.](assets/fig-13-metamer.svg)
+
+The three peaks in this figure are illustrative Gaussian curves, scaled by solving a 3 by 3 linear system so that their tristimulus values equal those of D65. Their spectra barely resemble daylight, and between the peaks they emit almost nothing, yet for the standard observer the two lights are the same color. There is no need to reproduce a spectrum to reproduce a color, which is why a display needs only three emitters rather than hundreds.
+
+Metamerism has limits, and they are worth keeping in mind:
+
+- It depends on the observer. People's cones differ a little, so a pair that matches for the standard observer may not match exactly for you.
+- For surfaces, it depends on the light. Two paints that match under daylight have different R(λ), so under a filament the products with S(λ) differ and the match can fail. That is why a shirt and trousers can match in the shop and clash outdoors.
+
+#### From a private response to a public standard
+
+To use this in engineering we need the three numbers in a standard form, for one agreed observer. In the late 1920s, Wright and Guild measured this without knowing the cone curves at all. Their observers adjusted three lights to match a test color, wavelength by wavelength. The method works because matches obey simple linear rules, [Grassmann's laws](https://en.wikipedia.org/wiki/Grassmann%27s_laws_%28color_science%29): if A matches B, then A plus C matches B plus C. Light mixing in matches behaves like vector addition.
+
+There was one awkward result. Some test lights could not be matched by any positive mixture of the three primaries. Observers had to add a primary to the test light instead, which amounts to a negative amount of that primary. We will meet the reason shortly.
+
+The CIE [standardized this data in 1931](https://doi.org/10.1002/(SICI)1520-6378(199702)22:1%3C11::AID-COL4%3E3.0.CO;2-7), then applied a linear transform to get three new functions, x̄, ȳ, and z̄, chosen for practical properties of the time: none ever goes negative, and ȳ equals the standard curve of perceived brightness across wavelength. Weighted sums with them give the **CIE XYZ tristimulus values**:
+
+```
+X = sum over λ of  S(λ) * xbar(λ)
+Y = sum over λ of  S(λ) * ybar(λ)
+Z = sum over λ of  S(λ) * zbar(λ)
+```
+
+XYZ is not a set of cone responses, and X, Y, and Z are not lights that exist. But the transform is linear and the original data came from color matching, so two spectra with the same XYZ are a metamer for the standard observer. The [CVRL database](http://www.cvrl.org/cmfs.htm) publishes these tables, and the metamer above was computed from them. XYZ is the common ground that every color space below is defined against, and **Y** has a physical meaning we will use repeatedly: it is **luminance**, a measure of how intense a light appears, weighted by wavelength.
+
+#### Separating color from intensity
+
+Doubling the power of a light doubles X, Y, and Z, but leaves what we would call its color nearly the same. To plot color without intensity, divide out the scale:
+
+```
+x = X / (X + Y + Z)
+y = Y / (X + Y + Z)
+```
+
+These are **chromaticity coordinates**. Our running color, with XYZ of 0.021054, 0.022735, and 0.046030, has x = 0.2344 and y = 0.2531. Plotting every spectral wavelength this way traces a curve known as the spectral locus:
+
+![The CIE 1931 xy chromaticity diagram, a horseshoe with wavelengths marked along its curved edge from 460 to 620 nanometers. Green fills the top, red the lower right, and blue the lower left, fading toward white in the middle.](assets/ref-cie-chromaticity.svg)
+
+*Image: BenRG, public domain, via Wikimedia Commons. White background added. Colors are approximate, because no screen can show this entire region.*
+
+Two properties of this diagram matter for the rest of the document:
+
+- **Mixing draws straight lines.** Because mixing is linear in XYZ, the chromaticity of a mix of two lights lies on the straight line between them. A mix of three lies inside their triangle.
+- **The locus curves outward.** All real lights lie on or inside the horseshoe, and no triangle with corners inside it can cover it all.
+
+That second point explains the negative amounts Wright and Guild needed: a pure spectral color lying outside the triangle of three primaries cannot be reached by adding positive light. We have three numbers for any color we can see, but we can't build a device that reaches them all. **Given that limit, how does a screen actually make color?**
+
+### 3. How a screen makes color: subpixels, primaries, and white point
+
+A screen is the metamer trick built in hardware. It never reproduces the spectrum of the thing being shown; it emits three kinds of light, in amounts that give your cones the right three responses.
+
+Look at a screen through a magnifying lens and each pixel resolves into separate emitters, called subpixels:
+
+![Four close-up photographs of display surfaces. Two cathode ray tubes show red, green, and blue phosphors as bars and dots. Two liquid crystal displays show diamond-shaped and vertical striped subpixels in red, green, and blue.](assets/ref-pixel-geometry.jpg)
+
+*Image: Pengo, CC BY-SA 3.0, via Wikimedia Commons.*
+
+At normal viewing distance the subpixels are too small to see individually, and [the retina spatially integrates their light](https://learnvisualcomputing.github.io/display-optics.html). The mix that results is **additive**: red and green light together give yellow, and all three at full power give white. This is not the subtractive mixing of paint, where each pigment removes light.
+
+The source of that light differs by technology, as [Zhu's *Foundations of Visual Computing*](https://learnvisualcomputing.github.io/display-optics.html) describes:
+
+- An **LCD** has a white backlight. Each subpixel has a color filter, and a liquid crystal cell between two polarizers controls how much light gets through.
+- An **OLED** or **MicroLED** display has subpixels that emit light directly, so a subpixel set to zero is simply off.
+
+Both reduce to the same model for our purposes. Each subpixel adds a fixed spectrum, scaled by how hard it is driven.
+
+#### Primaries and their triangle
+
+The chromaticity of one subpixel at full power is a **primary**. Three primaries are three points on the chromaticity diagram, and since mixes stay inside the triangle they form, that triangle is everything the display can show at its given brightness. This is its **gamut**.
+
+Two standard sets of primaries matter for the web, from the [predefined color spaces of CSS Color 4](https://www.w3.org/TR/css-color-4/#predefined):
+
+| Primary | sRGB x, y | Display P3 x, y |
+|---|---|---|
+| Red | 0.640, 0.330 | 0.680, 0.320 |
+| Green | 0.300, 0.600 | 0.265, 0.690 |
+| Blue | 0.150, 0.060 | 0.150, 0.060 |
+| White | 0.3127, 0.3290 (D65) | 0.3127, 0.3290 (D65) |
+
+#### What "white" means
+
+Three primaries fix the corners of the triangle, but not how much of each makes "full on" look neutral. For that a display needs a **white point**, the chromaticity reached when all three channels are at maximum. Both spaces above use D65, the daylight curve from section 1, whose chromaticity is x = 0.3127, y = 0.3290.
+
+There is nothing physically special about this choice. As we saw, D65 and a filament both look white to an adapted eye, so white is a convention, and the two spaces simply agree on one that suits displays viewed in ordinary conditions.
+
+We now have the physical picture: three emitters, each driven at some level, whose sum makes a color. The numbers `26, 43, 60` must say how hard to drive them. The tempting assumption is that 60 means about 24% of full power. It does not, and **the reason encoded values are not amounts of light is the next layer**.
+
 ## 1. Vocabulary
 
 These terms are often used interchangeably, but they answer different questions.
@@ -390,6 +535,20 @@ and [HSB interpolation for Figma color variables](https://uxdesign.cc/simplified
 
 ## 12. References
 
+Light, vision, and displays:
+
+- [CIE standard illuminant D65](https://cie.co.at/datatable/cie-standard-illuminant-d65), International Commission on Illumination (CIE), [DOI 10.25039/CIE.DS.hjfjmt59](https://doi.org/10.25039/CIE.DS.hjfjmt59). The tabulated spectrum used for the D65 curves.
+- [Colour & Vision Research Laboratory database](http://www.cvrl.org/), UCL. Tables of the [CIE 1931 color-matching functions](http://www.cvrl.org/cmfs.htm) and [cone fundamentals](http://www.cvrl.org/cones.htm).
+- [Visual pigments of rods and cones in a human retina](https://pubmed.ncbi.nlm.nih.gov/7359434/), Bowmaker and Dartnall, *Journal of Physiology*, 1980. Peak absorbances of the three cone types and rods.
+- [Pigments and signals in colour vision](https://doi.org/10.1113/jphysiol.1972.sp009719), Rushton, *Journal of Physiology*, 1972. The principle of univariance.
+- [The spectral sensitivities of the middle- and long-wavelength-sensitive cones](https://doi.org/10.1016/S0042-6989(00)00021-3), Stockman and Sharpe, *Vision Research*, 2000. The derivation of modern cone fundamentals.
+- [How the CIE 1931 color-matching functions were derived from Wright-Guild data](https://doi.org/10.1002/(SICI)1520-6378(199702)22:1%3C11::AID-COL4%3E3.0.CO;2-7), Fairman, Brill, and Hemmendinger, *Color Research and Application*, 1997.
+- [Grassmann's laws](https://en.wikipedia.org/wiki/Grassmann%27s_laws_%28color_science%29), Wikipedia. A starting point on the linearity of color matching.
+- [A perceptual color space for image processing](https://bottosson.github.io/posts/oklab/), Björn Ottosson. The derivation of Oklab by its creator, with its math and a comparison with HSV.
+- [RGB/XYZ Matrices](http://www.brucelindbloom.com/index.html?Eqn_RGB_XYZ_Matrix.html), Bruce Lindbloom. The derivation of RGB to XYZ matrices, with tables.
+
+- [Optical Mechanisms](https://learnvisualcomputing.github.io/display-optics.html), Yuhao Zhu, *Foundations of Visual Computing*. How LCD and emissive displays make light.
+
 Standards:
 
 - [CSS Color Module Level 4](https://www.w3.org/TR/css-color/), W3C. Definitions of HSL and Display P3,
@@ -426,3 +585,14 @@ Tools and practice:
   Codrops.
 - [Simplified Figma color variables based on HSB interpolation](https://uxdesign.cc/simplified-figma-color-variables-based-on-hsb-interpolation-c3e404585176),
   UX Collective.
+
+## Image credits
+
+These images keep their own licenses, as linked, rather than the repository's.
+
+| File | Source | Author | License | Change |
+|---|---|---|---|---|
+| `ref-visible-spectrum.svg` | [Linear visible spectrum](https://commons.wikimedia.org/wiki/File:Linear_visible_spectrum.svg) | Gringer | Public domain | White background added |
+| `ref-cone-response.svg` | [Cone fundamentals with sRGB spectrum](https://commons.wikimedia.org/wiki/File:Cone-fundamentals-with-srgb-spectrum.svg) | BenRG | Public domain | None |
+| `ref-cie-chromaticity.svg` | [CIE1931xy blank](https://commons.wikimedia.org/wiki/File:CIE1931xy_blank.svg) | BenRG | Public domain | White background added |
+| `ref-pixel-geometry.jpg` | [Pixel geometry 01 Pengo](https://commons.wikimedia.org/wiki/File:Pixel_geometry_01_Pengo.jpg) | Pengo | [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/) | None |
