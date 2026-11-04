@@ -1,0 +1,16 @@
+# Local-only plans
+*PLAN.md
+
+# APM
+apm_modules/
+apm.lock.yaml
+apm.yml
+
+# Local agent packages
+# Codex
+.agents/
+.codex/
+AGENTS.md
+# Claude
+.claude/
+CLAUDE.md
