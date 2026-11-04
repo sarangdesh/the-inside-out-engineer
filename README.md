@@ -33,11 +33,12 @@ Abstractions are part of the subject: how they are built, what guarantees they p
 ## Deep dives
 
 The Inside-Out Engineer's deep dives string together a story that starts at the bottom-most (almost) layer of the
-engineering stack and builds up towards the more familiar territory. An example:
+engineering stack and builds up towards the more familiar territory.
 
-> [How Websites Work: From Browser Internals to Next.js](./content/deep-dives/how-websites-work-from-browser-internals-to-nextjs.md)
-> 
-> A mechanism-first reference connecting browser internals, JavaScript runtimes, module loading, build tooling, React, and the Next.js App Router.
+| Deep dive | What it covers |
+|---|---|
+| [How Colors Work: From Color Spaces to Implementation](./content/deep-dives/how-colors-work/how-colors-work-from-color-spaces-to-implementation.md) | A library-independent reference to how color values are represented, converted, and rounded, through color spaces, luminance, and contrast, with implementation notes on culori and Figma. |
+| [How Websites Work: From Browser Internals to Next.js](./content/deep-dives/how-websites-work-from-browser-internals-to-nextjs.md) | A mechanism-first reference connecting browser internals, JavaScript runtimes, module loading, build tooling, React, and the Next.js App Router. |
 
 ## Scope
 
