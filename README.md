@@ -37,7 +37,7 @@ engineering stack and builds up towards the more familiar territory.
 
 | Deep dive | What it covers |
 |---|---|
-| [How Colors Work: From Light to Implementation](./content/deep-dives/how-colors-work/how-colors-work-from-light-to-implementation.md) | A library-independent reference to how color values are represented, converted, and rounded, through color spaces, luminance, and contrast, with implementation notes on culori and Figma. |
+| [How Colors Work: From Light to Implementation](./content/deep-dives/how-colors-work/how-colors-work-from-light-to-implementation.md) | A bottom-up account of color, from light and vision through displays, color spaces, and encodings to luminance and contrast, with a case study on exact values in Figma. |
 | [How Websites Work: From Browser Internals to Next.js](./content/deep-dives/how-websites-work-from-browser-internals-to-nextjs.md) | A mechanism-first reference connecting browser internals, JavaScript runtimes, module loading, build tooling, React, and the Next.js App Router. |
 
 ## Scope
