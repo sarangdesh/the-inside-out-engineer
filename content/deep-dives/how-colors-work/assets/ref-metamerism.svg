@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="100%" height="100%" viewBox="-195 -150 800 1200"><rect x="-195" y="-150" width="800" height="1200" fill="#ffffff"/>
+ <title>metamerism spectrum example</title>
+ <desc>Illustration of colour metamerism by CMG Lee. In column 1, a ball is illuminated by monochromatic light. Multiplying the spectrum by the cones' spectral sensitivity curves gives the response for each cone type. In column 2, metamerism is used to simulate the scene with blue, green and red LEDs, giving a similar response. Curves are from http://commons.wikimedia.org/wiki/File:Cones_SMJ2_E.svg .</desc>
+ <style type="text/css">
+.main { font-family:Helvetica,Arial,sans-serif; font-size:40px; text-anchor:middle; fill:#000000; stroke:#000000; stroke-width:2; }
+text  { stroke:none; }
+.big  { font-size:60px; }
+.s    { stroke:#0000ff; }
+.m    { stroke:#009900; }
+.l    { stroke:#cc0000; }
+ </style>
+ <defs>
+  <filter id="filter_blur"><feGaussianBlur stdDeviation="4"/></filter>
+  <radialGradient id="grad_sphere" cx="50%" cy="50%" r="50%" fx="50%" fy="90%">
+   <stop offset="0%"  stop-color="#ffcc00"/>
+   <stop offset="50%" stop-color="#cc9900"/>
+   <stop offset="99%" stop-color="#996600"/>
+  </radialGradient>
+  <linearGradient id="grad_highlight" x1="0%" y1="0%" x2="0%" y2="100%">
+   <stop offset="0%"  stop-color="#ffffff" stop-opacity="1"/>
+   <stop offset="30%" stop-color="#ffcc00" stop-opacity="1"/>
+   <stop offset="99%" stop-color="#ffffff" stop-opacity="0"/>
+  </linearGradient>
+  <g id="ball" stroke="none">
+   <circle  cx="0" cy="0" r="100" fill="url(#grad_sphere)"/>
+   <ellipse cx="0" cy="-45" rx="70" ry="50" fill="url(#grad_highlight)" filter="url(#filter_blur)"/>
+  </g>
+  <path id="arrowhead" d="M -8,-4 L 0,0 L -8,4" fill="none"/>
+  <g id="axes" stroke-width="1">
+   <path fill="none" d="M 390,-200 V 0 H 730"/>
+   <use xlink:href="#arrowhead" transform="translate(730,0)"/>
+   <use xlink:href="#arrowhead" transform="translate(390,-200) rotate(-90)"/>
+   <text transform="translate(370,-170)" y="0.7ex" font-style="italic">I</text>
+   <text transform="translate(710,  20)" y="0.7ex" font-style="italic">&#955;</text>
+  </g>
+  <path id="s" class="s" fill="none" transform="scale(1.287,1.05) translate(42.4,-631)" d="M 260.22856,627.36832 C 268.63177,623.99961 272.48995,611.60078 278.59667,574.28755 C 284.89487,539.29741 284.64368,515.26672 290.9579,482.19587 C 297.2986,448.98627 302.36571,441.15811 303.46489,441.18272 C 304.81474,441.38559 305.48169,450.41749 309.16866,463.07059 C 311.93855,478.22749 315.07318,477.88792 316.23973,483.51087 C 317.86521,498.792 320.82023,505.21276 322.58382,515.24139 C 334.55781,587.13889 336.55434,588.52569 346.09153,608.30169 C 346.53188,610.0858 352.18168,614.29221 352.74047,617.57163 C 354.53948,622.41891 369.22046,628.84221 380.7722,629.81973 L 516.06239,630.14624"/>
+  <path id="m" class="m" fill="none" transform="scale(1.287,1.05) translate(42.4,-631)" d="M 260.41649,629.61953 C 286.27556,628.40701 287.43547,623.07851 295.99667,619.26221 C 308.37506,613.74434 315.99718,609.15544 319.61292,600.78024 C 325.8034,588.84572 336.49683,574.8142 337.91649,570.51238 C 345.32723,556.29252 350.83565,521.77346 352.57664,512.23476 C 357.89704,483.08474 365.04436,449.19482 372.2022,442.83381 C 374.00601,441.66142 376.05825,440.73747 378.80935,440.51238 C 386.72288,439.71768 387.97262,447.68668 392.90117,458.6004 C 398.45257,472.28671 400.43211,472.71476 402.02998,479.70881 C 417.14681,533.82537 419.10164,549.76137 424.14112,567.06402 C 428.3703,580.1491 432.79651,594.51732 438.79155,605.44155 C 444.78658,616.36579 451.7191,623.2147 459.06685,625.42805 C 470.02822,628.72993 471.20529,630.37862 516.66572,629.96768"/>
+  <path id="l" class="l" fill="none" transform="scale(1.287,1.05) translate(42.4,-631)" d="M 285.04492,625.70516 C 323.58922,619.62842 317.69963,613.8829 328.01755,605.72247 C 348.06909,589.8438 352.94209,537.86122 362.7004,501.83521 C 370.33503,473.46156 373.60327,471.19618 378.68762,461.98474 C 383.77197,452.7733 388.06783,446.94046 389.7941,447.05425 C 391.45751,447.16389 394.45359,445.80571 396.54411,444.6427 C 398.79488,443.39055 399.42548,442.04453 401.2756,441.60486 C 403.35089,441.32353 404.90153,441.98748 406.35805,443.32055 C 407.81457,444.65362 408.48249,446.65582 409.54622,446.90816 C 417.51935,448.11846 428.53257,482.24684 438.39871,518.18705 C 454.61902,567.38714 456.09449,627.99995 504.38327,629.70245"/>
+  <g id="common">
+   <use xlink:href="#ball"/>
+   <use xlink:href="#axes" transform="translate(-550,350)"/>
+   <text class="big" transform="translate(0,380)" y="0.7ex">&#215;</text>
+   <g transform="translate(-550,645)">
+    <use xlink:href="#axes"/>
+    <use xlink:href="#s"/>
+    <use xlink:href="#m"/>
+    <use xlink:href="#l"/>
+    <text class="s" transform="translate(445,-220)" y="0.7ex">S</text>
+    <text class="m" transform="translate(540,-220)" y="0.7ex">M</text>
+    <text class="l" transform="translate(575,-220)" y="0.7ex">L</text>
+   </g>
+   <text class="big" transform="translate(0,675)" y="0.7ex">=</text>
+   <g transform="translate(-550,900)">
+    <use xlink:href="#axes"/>
+    <use xlink:href="#s" transform="scale(1,0.1)"/>
+    <use xlink:href="#m" transform="scale(1,0.7)"/>
+    <use xlink:href="#l" transform="scale(1,0.8)"/>
+    <text class="s" transform="translate(440, -40)" y="0.7ex">S</text>
+    <text class="m" transform="translate(540,-175)" y="0.7ex">M</text>
+    <text class="l" transform="translate(575,-180)" y="0.7ex">L</text>
+   </g>
+   <g transform="translate(-10,1000)">
+    <text class="s" transform="translate(-100,20)" y="0.7ex">S</text>
+    <text class="m" transform="translate(   0,20)" y="0.7ex">M</text>
+    <text class="l" transform="translate( 100,20)" y="0.7ex">L</text>
+    <g transform="translate(-20,0) scale(1,-1)" stroke="none">
+     <rect x="-100" y="0" width="40" height="10" fill="#0000ff"/>
+     <rect x="0"    y="0" width="40" height="70" fill="#009900"/>
+     <rect x="100"  y="0" width="40" height="80" fill="#cc0000"/>
+    </g>
+    <path d="M -150,0 H 150" stroke="#cccccc"/>
+   </g>
+  </g>
+ </defs>
+ <g class="main">
+  <g>
+   <text class="big" transform="translate(-140,-100)" y="0.7ex">1.</text>
+   <use xlink:href="#common"/>
+   <path transform="translate(-550,350)" fill="none" stroke="#cc6600" d="M 390,0 H 540 C 550,0 547,-200 550,-200 S 550,0 560,0 H 730"/>
+   <text fill="#cc9900" transform="translate(0,130)" y="0.7ex">Y</text>
+  </g>
+  <g transform="translate(420,0)">
+   <text class="big" transform="translate(-210,-100)" y="0.7ex">2.</text>
+   <g stroke="none">
+    <rect x="-178" y="-124" width="356" height="248" rx="10" ry="10" fill="#cccccc"/>
+    <rect x="-162" y="-108" width="324" height="216" rx="2"  ry="2"  fill="#eeeeee"/>
+    <circle cx="155" cy="116" r="4" fill="#ffffff"/>
+   </g>
+   <use xlink:href="#common"/>
+   <g transform="translate(-550,350)" fill="none">
+    <path stroke="#0000ff" d="M 390,-1 C 440,-50 470,0 580,-1 H 730"/>
+    <path stroke="#00cc00" d="M 390,0 H 500 C 520,-190 530,0 540,-130 S 550,0 590,0 H 730"/>
+    <path stroke="#ff0000" d="M 390,1 H 510 C 580,0 560,-230 580,-170 S 600,-190 650,1 H 730"/>
+    <text fill="#3333ff" transform="translate(440, -50)" y="0.7ex">B</text>
+    <text fill="#00cc00" transform="translate(540,-190)" y="0.7ex">G</text>
+    <text fill="#ff0000" transform="translate(580,-200)" y="0.7ex">R</text>
+   </g>
+  </g>
+ </g>
+</svg>
