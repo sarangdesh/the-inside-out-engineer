@@ -41,19 +41,19 @@ One color runs through the whole document, `#1A2B3C`, a dark slate blue.
 
 ## The whole pipeline before the details
 
-Before any one layer, here is the journey in one picture. Follow the arrow from light on the left, through the numbers, and back to light.
+Before any one layer, here is the journey in one picture. Follow the arrows from light at the top, through the numbers, and back to light.
 
 ```mermaid
-flowchart LR
-    S["Spectrum<br/>power at each wavelength"] --> C["Three cone responses<br/>L, M, S"]
-    C --> X["CIE XYZ<br/>a standard form of those responses"]
-    X --> L["Linear RGB<br/>amounts of three primaries"]
-    L --> E["Encoded RGB<br/>after the transfer function"]
-    E --> Q["Stored value<br/>26, 43, 60"]
-    Q --> D["Display<br/>decodes and drives subpixels"]
-    D --> S2["Spectrum again<br/>a different one, matching for the eye"]
-    Q -.-> M["HSL, HSB, OKLCH<br/>models for people"]
-    L -.-> Y["Luminance and contrast<br/>decisions"]
+flowchart TD
+    S["Spectrum: power at each wavelength"] --> C["Three cone responses: L, M, S"]
+    C --> X["CIE XYZ: a standard form of those responses"]
+    X --> L["Linear RGB: amounts of three primaries"]
+    L --> E["Encoded RGB: after the transfer function"]
+    E --> Q["Stored value: 26, 43, 60"]
+    Q --> D["Display: decodes and drives subpixels"]
+    D --> S2["A new spectrum that matches for the eye"]
+    L -.-> Y["Luminance and contrast: decisions"]
+    Q -.-> K["HSL, HSB, OKLCH: models for people"]
 ```
 
 The same color at each stage, computed with the formulas developed below:
